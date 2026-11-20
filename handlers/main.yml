@@ -1,7 +1,7 @@
 ---
 # handlers file for nss_pam_ldap_configure
-- name: restart nslcd
+- name: Restart nslcd
   when: nss_pam_ldap_activate
-  service:
+  ansible.builtin.service:
     name: nslcd
     state: restarted

@@ -2,19 +2,29 @@
 - name: Installing andrewrothstein.nss_pam_ldap
   ansible.builtin.include_role:
     name: andrewrothstein.nss_pam_ldap
-- name: resolve platform specific vars
-  include_vars: '{{ item }}'
+- name: Resolve platform specific vars
+  ansible.builtin.include_vars: '{{ item }}'
   with_first_found:
     - files:
-        - '{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
-        - '{{ ansible_distribution }}.yml'
-        - '{{ ansible_os_family }}.yml'
+        - '{{ ansible_facts["distribution"] }}-{{ ansible_facts["distribution_release"] }}.yml'
+        - '{{ ansible_facts["distribution"] }}.yml'
+        - '{{ ansible_facts["os_family"] }}.yml'
       skip: true
       paths:
         - '{{ role_path }}/vars'
 
-- name: templatize
-  become: yes
+- name: Ensure /etc/pam.d exists
+  become: true
+  become_user: root
+  ansible.builtin.file:
+    path: /etc/pam.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Templatize
+  become: true
   become_user: root
   with_items:
     - f: nslcd.conf
@@ -24,17 +34,17 @@
       m: '0644'
     - f: ldap
       d: /etc/pam.d
-  template:
+  ansible.builtin.template:
     src: '{{ item.f }}.j2'
     dest: '{{ item.d }}/{{ item.f }}'
     mode: '{{ item.m | default("0600") }}'
     backup: '{{ nss_pam_ldap_backup_files }}'
-  notify: restart nslcd
+  notify: Restart nslcd
 
-- name: start service
-  become: yes
+- name: Start service
+  become: true
   become_user: root
   when: nss_pam_ldap_activate
-  service:
+  ansible.builtin.service:
     name: nslcd
     state: started
