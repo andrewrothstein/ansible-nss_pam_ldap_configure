@@ -1,6 +1,6 @@
-andrewrothstein.nss-pam-ldap-configure
+andrewrothstein.nss_pam_ldap_configure
 ======================================
-[![Build Status](https://travis-ci.org/andrewrothstein/ansible-nss-pam-ldap-configure.svg?branch=master)](https://travis-ci.org/andrewrothstein/ansible-nss-pam-ldap-configure)
+![Build Status](https://github.com/andrewrothstein/ansible-nss_pam_ldap_configure/actions/workflows/build.yml/badge.svg)
 
 Configure NSS/PAM for LDAP.
 
@@ -24,7 +24,7 @@ Example Playbook
 ```yml
 - hosts: servers
   roles:
-    - andrewrothstein.nss-pam-ldap-configure
+    - andrewrothstein.nss_pam_ldap_configure
 ```
 
 License

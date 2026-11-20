@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: Testing andrewrothstein.nss_pam_ldap_configure
+  hosts: all
   roles:
     - role: '{{ playbook_dir }}'
-      nss_pam_ldap_activate: False
+      nss_pam_ldap_activate: false

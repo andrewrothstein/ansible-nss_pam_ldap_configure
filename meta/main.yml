@@ -1,41 +1,41 @@
 ---
 galaxy_info:
   author: Andrew Rothstein
-  description: setup LDAP based PAM authentication with nslcd
   company: BlackRock
-  license:
-    - MIT
-  min_ansible_version: 2.0
+  description: setup LDAP based PAM authentication with nslcd
+  license: MIT
+  min_ansible_version: '2.0'
+  namespace: andrewrothstein
   platforms:
     - name: Alpine
       versions:
         - all
-    - name: Archlinux
+    - name: ArchLinux
       versions:
         - all
     - name: Debian
       versions:
-        - buster
-        - stretch
+        - bookworm
+        - trixie
     - name: EL
       versions:
-        - 7
-        - 8
+        - '10'
+        - '9'
     - name: Fedora
       versions:
-        - 31
-        - 32
+        - all
+    - name: Kali
+      versions:
+        - all
     - name: Ubuntu
       versions:
-        - bionic
-        - focal
-        - xenial
+        - jammy
+        - noble
+        - resolute
   galaxy_tags:
     - pam
     - auth
     - ldap
     - nss
-
-dependencies:
-  - role: andrewrothstein.nss-pam-ldap
-    version: v1.0.5
+  role_name: nss_pam_ldap_configure
+dependencies: []

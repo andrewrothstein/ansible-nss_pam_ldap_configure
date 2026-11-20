@@ -1,4 +1,7 @@
 ---
+- name: Installing andrewrothstein.nss_pam_ldap
+  ansible.builtin.include_role:
+    name: andrewrothstein.nss_pam_ldap
 - name: resolve platform specific vars
   include_vars: '{{ item }}'
   with_first_found:
