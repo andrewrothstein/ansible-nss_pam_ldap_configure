@@ -34,12 +34,30 @@
       m: '0644'
     - f: ldap
       d: /etc/pam.d
+  when: item.f != 'ldap' or nss_pam_ldap_pam_ldap_file
   ansible.builtin.template:
     src: '{{ item.f }}.j2'
     dest: '{{ item.d }}/{{ item.f }}'
     mode: '{{ item.m | default("0600") }}'
     backup: '{{ nss_pam_ldap_backup_files }}'
   notify: Restart nslcd
+
+- name: Ensure lines in PAM common files
+  become: true
+  become_user: root
+  loop: >-
+    {{
+      (nss_pam_ldap_pam_common_session | map('combine', {'file': 'common-session'}) | list)
+      + (nss_pam_ldap_pam_common_password | map('combine', {'file': 'common-password'}) | list)
+    }}
+  ansible.builtin.lineinfile:
+    path: '/etc/pam.d/{{ item.file }}'
+    line: '{{ item.line | default(omit) }}'
+    regexp: '{{ item.regexp | default(omit) }}'
+    insertafter: '{{ item.insertafter | default(omit) }}'
+    insertbefore: '{{ item.insertbefore | default(omit) }}'
+    state: '{{ item.state | default("present") }}'
+    backup: '{{ nss_pam_ldap_backup_files }}'
 
 - name: Start service
   become: true
