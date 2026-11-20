@@ -57,5 +57,20 @@
 #     field: loginShell
 #     mapped_to: "\"/bin/bash\""
 
+# lines to ensure in /etc/pam.d/common-session and /etc/pam.d/common-password
+# (Debian/Ubuntu). each item is passed to ansible.builtin.lineinfile: 'line' is
+# required; 'regexp', 'insertafter', 'insertbefore' and 'state' are optional.
+# the files must already exist.
+# nss_pam_ldap_pam_common_session:
+#   - line: session required pam_mkhomedir.so skel=/etc/skel umask=0077
+#     regexp: pam_mkhomedir.so
+# nss_pam_ldap_pam_common_password:
+#   - line: password [success=1 user_unknown=ignore default=die] pam_ldap.so try_first_pass
+#     regexp: pam_ldap.so
+
 nss_pam_ldap_activate: true
 nss_pam_ldap_backup_files: false
+# set false to leave /etc/pam.d/ldap unmanaged
+nss_pam_ldap_pam_ldap_file: true
+nss_pam_ldap_pam_common_session: []
+nss_pam_ldap_pam_common_password: []
