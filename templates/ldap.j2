@@ -1,7 +1,9 @@
-auth sufficient pam_ldap.so minimum_uid={{nss_pam_ldap_minimum_uid|default(1000)}} user_first_pass
+# {{ ansible_managed }}
+# PAM service file for LDAP authentication via nss-pam-ldapd's pam_ldap.so.
+# See the manual page pam_ldap(8).
+{% set opts = 'minimum_uid=' ~ (nss_pam_ldap_minimum_uid | default(1000)) %}
 
-account sufficient pam_ldap.so minimum_uid={{nss_pam_ldap_minimum_uid|default(1000)}}
-
-session optional pam_ldap.so minimum_uid={{nss_pam_ldap_minimum_uid|default(1000)}}
-
-password sufficient pam_ldap.so minimum_uid={{nss_pam_ldap_minimum_uid|default(1000)}} try_first_pass
+auth     sufficient pam_ldap.so {{ opts }} try_first_pass
+account  sufficient pam_ldap.so {{ opts }}
+session  optional   pam_ldap.so {{ opts }}
+password sufficient pam_ldap.so {{ opts }} try_first_pass
