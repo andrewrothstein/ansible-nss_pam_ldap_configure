@@ -52,7 +52,7 @@
     }}
   ansible.builtin.lineinfile:
     path: '/etc/pam.d/{{ item.file }}'
-    line: '{{ item.line }}'
+    line: '{{ item.line | default(omit) }}'
     regexp: '{{ item.regexp | default(omit) }}'
     insertafter: '{{ item.insertafter | default(omit) }}'
     insertbefore: '{{ item.insertbefore | default(omit) }}'

@@ -59,14 +59,19 @@
 
 # lines to ensure in /etc/pam.d/common-session and /etc/pam.d/common-password
 # (Debian/Ubuntu). each item is passed to ansible.builtin.lineinfile: 'line' is
-# required; 'regexp', 'insertafter', 'insertbefore' and 'state' are optional.
-# the files must already exist.
+# required unless state is absent; 'regexp', 'insertafter', 'insertbefore' and
+# 'state' are optional. the files must already exist.
+# without insertbefore/insertafter a new line is appended, which in
+# common-password lands after pam_deny.so and is never reached.
+# regexp is unanchored and also matches comments; anchor it as needed.
+# note: pam-auth-update regenerates common-* and can overwrite these edits.
 # nss_pam_ldap_pam_common_session:
 #   - line: session required pam_mkhomedir.so skel=/etc/skel umask=0077
-#     regexp: pam_mkhomedir.so
+#     regexp: ^session.*pam_mkhomedir.so
 # nss_pam_ldap_pam_common_password:
-#   - line: password [success=1 user_unknown=ignore default=die] pam_ldap.so try_first_pass
-#     regexp: pam_ldap.so
+#   - line: password sufficient pam_ldap.so try_first_pass
+#     regexp: ^password.*pam_ldap.so
+#     insertbefore: pam_unix.so
 
 nss_pam_ldap_activate: true
 nss_pam_ldap_backup_files: false
